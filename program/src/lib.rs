@@ -32,7 +32,7 @@ fn process_instruction(
 
     let data = &mut &mut account.data.borrow_mut();
 
-    data[..1].copy_from_slice(&[69]);
+    data[..4].copy_from_slice(instruction_data);
 
     msg!("Done");
 

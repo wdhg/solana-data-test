@@ -197,10 +197,11 @@ export async function checkProgram(): Promise<void> {
  */
 export async function writeData(): Promise<void> {
   console.log("Writing to", targetPubkey.toBase58());
+
   const instruction = new TransactionInstruction({
     keys: [{ pubkey: targetPubkey, isSigner: false, isWritable: true }],
     programId,
-    data: Buffer.alloc(0), // All data is [1,2,3,4]
+    data: Buffer.from([0xd2, 0x02, 0x96, 0x49]),
   });
   await sendAndConfirmTransaction(
     connection,
@@ -224,7 +225,7 @@ export async function reportData(): Promise<void> {
   );
   console.log(
     targetPubkey.toBase58(),
-    "has been written with the data ",
+    "has been written with the data",
     target.data
   );
 }
