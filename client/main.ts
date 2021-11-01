@@ -4,7 +4,7 @@ import {
   checkProgram,
   writeData,
   reportData,
-} from './data_test';
+} from "./data_test";
 
 async function main() {
   console.log("Let's say hello to a Solana account...");
@@ -23,13 +23,13 @@ async function main() {
 
   // Find out what data the account has
   await reportData();
-  console.log('Success');
+  console.log("Success");
 }
 
 main().then(
   () => process.exit(),
-  err => {
+  (err) => {
     console.error(err);
     process.exit(-1);
-  },
+  }
 );
