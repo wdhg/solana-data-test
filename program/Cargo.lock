@@ -676,6 +676,8 @@ dependencies = [
 name = "solana-data-test"
 version = "0.1.0"
 dependencies = [
+ "borsh",
+ "borsh-derive",
  "solana-program",
 ]
 

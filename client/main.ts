@@ -7,7 +7,6 @@ import {
 } from "./data_test";
 
 async function main() {
-  console.log("Let's say hello to a Solana account...");
 
   // Establish connection to the cluster
   await establishConnection();

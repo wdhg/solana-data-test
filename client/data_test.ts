@@ -63,11 +63,13 @@ const PROGRAM_KEYPAIR_PATH = path.join(
  * The state of a target account managed by the program
  */
 class TargetAccount {
-  data = 0;
+  mentorCount = 0;
+  menteeCount = 0;
 
-  constructor(fields: { data: number } | undefined = undefined) {
+  constructor(fields: { mentorCount: number, menteeCount: number } | undefined = undefined) {
     if (fields) {
-      this.data = fields.data;
+      this.mentorCount = fields.mentorCount;
+      this.menteeCount = fields.menteeCount;
     }
   }
 }
@@ -76,7 +78,7 @@ class TargetAccount {
  * Borsh schema definition for greeting accounts
  */
 const TargetSchema = new Map([
-  [TargetAccount, { kind: "struct", fields: [["data", "u32"]] }],
+  [TargetAccount, { kind: "struct", fields: [["mentorCount", "u32"],["menteeCount", "u32"]] }],
 ]);
 
 /**
@@ -201,7 +203,7 @@ export async function writeData(): Promise<void> {
   const instruction = new TransactionInstruction({
     keys: [{ pubkey: targetPubkey, isSigner: false, isWritable: true }],
     programId,
-    data: Buffer.from([0xd2, 0x02, 0x96, 0x49]),
+    data: Buffer.from([0x1]),
   });
   await sendAndConfirmTransaction(
     connection,
@@ -225,7 +227,10 @@ export async function reportData(): Promise<void> {
   );
   console.log(
     targetPubkey.toBase58(),
-    "has been written with the data",
-    target.data
+    "has ",
+    target.mentorCount,
+    " mentor points and ",
+    target.menteeCount,
+    " mentee points."
   );
 }

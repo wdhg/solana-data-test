@@ -6,6 +6,13 @@ use solana_program::{
     program_error::ProgramError,
     pubkey::Pubkey,
 };
+use borsh::{BorshDeserialize, BorshSerialize};
+
+#[derive(BorshSerialize, BorshDeserialize, Debug)]
+pub struct TargetAccount {
+    pub mentor_counter: u32,
+    pub mentee_counter: u32,
+}
 
 entrypoint!(process_instruction);
 fn process_instruction(
@@ -28,11 +35,16 @@ fn process_instruction(
         return Err(ProgramError::IncorrectProgramId);
     }
 
-    msg!("Writing data...");
+    // Increment and store the number of times the account has been greeted
+    let mut target_account = TargetAccount::try_from_slice(&account.data.borrow())?;
 
-    let data = &mut &mut account.data.borrow_mut();
-
-    data[..4].copy_from_slice(instruction_data);
+    match instruction_data[0] {
+        0 => target_account.mentor_counter += 1,
+        1 => target_account.mentee_counter += 1,
+        _ => {msg!("Invalid role"); return Err(ProgramError::InvalidInstructionData)}
+    }
+   
+    target_account.serialize(&mut &mut account.data.borrow_mut()[..])?;
 
     msg!("Done");
 
